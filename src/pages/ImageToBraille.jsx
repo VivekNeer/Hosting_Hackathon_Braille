@@ -5,7 +5,7 @@ import TwoButtons from "../components/TwoButtons.jsx";
 
 const ImageToBraille = () => {
     return (
-        <div className="flex justify-center flex-col items-center w-full">
+        <div className="flex justify-center flex-col items-center w-full gap-10">
             <div className="flex gap-16">
                 <div className="text-center">
                     <article className="prose">
