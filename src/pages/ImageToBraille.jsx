@@ -19,6 +19,9 @@ const ImageToBraille = () => {
                     </article>
                     <textarea className="textarea textarea-bordered h-96 w-96 text-center resize-none"
                               placeholder="Output"></textarea>
+                              
+                              <textarea className="textarea textarea-bordered h-96 w-96 text-center resize-none"
+                              placeholder="Output"></textarea>
                 </div>
             </div>
             <TwoButtons />
