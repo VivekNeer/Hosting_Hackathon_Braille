@@ -1,13 +1,13 @@
-// import React from 'react'
-
-import TextToBraille from "./TextToBraille.jsx";
+import React from 'react'
+import TextToBraille from './TextToBraille'
+import TextToBrail from '../components/TextToBrail'
 
 const Home = () => {
-    return (
-        <div>
-            <TextToBraille />
-        </div>
-    )
+  return (
+    <div>
+        <TextToBrail />
+    </div>
+  )
 }
 
 export default Home
