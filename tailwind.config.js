@@ -13,6 +13,6 @@ export default {
     daisyui,
   ],
   daisyui: {
-    themes: ["luxury", "cupcake","cyberpunk", "business"],
+    themes: ["cupcake", "business"],
   },
 }
