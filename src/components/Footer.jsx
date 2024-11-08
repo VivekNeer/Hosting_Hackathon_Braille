@@ -5,7 +5,7 @@ import { TiSocialInstagram } from "react-icons/ti";
 
 const CustomFooter = () => {
   return (
-    <footer className="footer bg-neutral text-neutral-content p-10">
+    <footer className="footer bg-neutral text-neutral-content p-10 mt-10">
       <aside>
         {/* <svg
           width="50"
