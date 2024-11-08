@@ -108,7 +108,7 @@ const PdfToBraille = () => {
         </div>
         <div className="text-center">
           <article className="prose mb-4">
-            <h2 className="text-xl font-semibold">Text</h2>
+            <h2>Text</h2>
           </article>
           <textarea
             placeholder="Converted Text From PDF"
