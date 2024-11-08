@@ -12,11 +12,10 @@ const CustomNavbar = () => {
 
   return (
     <div className="navbar bg-base-100 mb-4">
-        <select data-choose-theme className="btn hidden lg:block">
-          <option value="luxury">Luxury</option>
-          <option value="cupcake">Cupcake</option>
-          <option value="cyberpunk">Cyberpunk</option>
-        </select>
+      <select data-choose-theme className="btn hidden lg:block">
+        <option value="cupcake">Cupcake</option>
+        <option value="business">Business</option>
+      </select>
     </div>
   );
 };
