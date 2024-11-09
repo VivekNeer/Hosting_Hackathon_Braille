@@ -71,6 +71,14 @@ const TextToBrail = ({ downloadPDF }) => {
     doc.save('braille_output.pdf');
   };
 
+  const handleDownloadBRF = () => {
+    const blob = new Blob([outputValue], { type: 'text/plain;charset=utf-8' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'braille_output.brf';
+    link.click();
+  };
+
   return (
     <>
       <div className="flex justify-center items-center w-full gap-10 my-8">
@@ -98,7 +106,7 @@ const TextToBrail = ({ downloadPDF }) => {
           />
         </div>
       </div>
-      <TwoButtons downloadPDF={handleDownloadPDF} />
+      <TwoButtons downloadPDF={handleDownloadPDF} downloadBRF={handleDownloadBRF} />
     </>
   );
 };

@@ -6,38 +6,64 @@ import TwoButtons from "../components/TwoButtons.jsx";
 
 // Braille map for conversion
 const brailleMap = {
-  a: '⠁', b: '⠃', c: '⠉', d: '⠙', e: '⠑', f: '⠋', g: '⠛', h: '⠓', i: '⠊', j: '⠚',
-  k: '⠅', l: '⠇', m: '⠍', n: '⠝', o: '⠕', p: '⠏', q: '⠟', r: '⠗', s: '⠎', t: '⠞',
-  u: '⠥', v: '⠧', w: '⠺', x: '⠭', y: '⠽', z: '⠵',
-  '1': '⠁', '2': '⠃', '3': '⠉', '4': '⠙', '5': '⠑', '6': '⠋', '7': '⠛', '8': '⠓', '9': '⠊', '0': '⠚',
-};
+    a: '⠁', b: '⠃', c: '⠉', d: '⠙', e: '⠑', f: '⠋', g: '⠛', h: '⠓', i: '⠊', j: '⠚',
+    k: '⠅', l: '⠇', m: '⠍', n: '⠝', o: '⠕', p: '⠏', q: '⠟', r: '⠗', s: '⠎', t: '⠞',
+    u: '⠥', v: '⠧', w: '⠺', x: '⠭', y: '⠽', z: '⠵',
+    '1': '⠁', '2': '⠃', '3': '⠉', '4': '⠙', '5': '⠑', '6': '⠋', '7': '⠛', '8': '⠓', '9': '⠊', '0': '⠚',
+    '+': '⠐', '.': '⠲', '(': '⠶', ')': '⠶', '/': '⠌', '¥': '⠘', ':': '⠱', '=': '⠿'
+  };
 const NUMBER_INDICATOR = '⠼';
 const LETTER_INDICATOR = '⠰';
 
+// function toBraille(text) {
+//   let result = '';
+//   let isPrevCharNumber = false;
+//   for (const char of text) {
+//     if (/\d/.test(char)) {
+//       if (!isPrevCharNumber) {
+//         result += NUMBER_INDICATOR;
+//         isPrevCharNumber = true;
+//       }
+//       result += brailleMap[char];
+//     } else if (/[a-zA-Z]/.test(char)) {
+//       if (isPrevCharNumber) {
+//         result += LETTER_INDICATOR;
+//         isPrevCharNumber = false;
+//       }
+//       result += brailleMap[char.toLowerCase()];
+//     } else {
+//       result += char;
+//       isPrevCharNumber = false;
+//     }
+//   }
+//   return result;
+// }
 function toBraille(text) {
-  let result = '';
-  let isPrevCharNumber = false;
-  for (const char of text) {
-    if (/\d/.test(char)) {
-      if (!isPrevCharNumber) {
-        result += NUMBER_INDICATOR;
-        isPrevCharNumber = true;
-      }
-      result += brailleMap[char];
-    } else if (/[a-zA-Z]/.test(char)) {
-      if (isPrevCharNumber) {
-        result += LETTER_INDICATOR;
+    let result = '';
+    let isPrevCharNumber = false;
+    for (const char of text) {
+      if (/\d/.test(char)) {
+        if (!isPrevCharNumber) {
+          result += NUMBER_INDICATOR;
+          isPrevCharNumber = true;
+        }
+        result += brailleMap[char] || '?';  // Use ? for unmapped numbers
+      } else if (/[a-zA-Z]/.test(char)) {
+        if (isPrevCharNumber) {
+          result += LETTER_INDICATOR;
+          isPrevCharNumber = false;
+        }
+        result += brailleMap[char.toLowerCase()] || '?';  // Use ? for unmapped letters
+      } else if (brailleMap[char]) {
+        result += brailleMap[char];
         isPrevCharNumber = false;
+      } else {
+        result += '?';  // For unmapped special characters
       }
-      result += brailleMap[char.toLowerCase()];
-    } else {
-      result += char;
-      isPrevCharNumber = false;
     }
+    return result;
   }
-  return result;
-}
-
+  
 const ImageToBraille = () => {
   const [extractedText, setExtractedText] = useState('');
   const [brailleText, setBrailleText] = useState('');
@@ -93,6 +119,29 @@ const ImageToBraille = () => {
     doc.save('braille_output.pdf');
   };
 
+  const handleDownloadBRF = () => {
+    if (!brailleText) {
+      alert('No Braille text available');
+      return;
+    }
+
+    const brfContent = brailleText.split('\n').map(line => {
+      return line.split('').map(char => getBrailleByteValue(char)).join('');
+    }).join('\n');
+
+    const brfBlob = new Blob([brfContent], { type: 'application/octet-stream' });
+    const brfURL = URL.createObjectURL(brfBlob);
+    const link = document.createElement('a');
+    link.href = brfURL;
+    link.download = 'braille_output.brf';
+    link.click();
+    URL.revokeObjectURL(brfURL);
+  };
+
+  const getBrailleByteValue = (brailleChar) => {
+    return brailleMap[brailleChar] || ' ';
+  };
+
   return (
     <div className="flex justify-center flex-col items-center w-full gap-10">
       <div className="flex gap-16">
@@ -130,7 +179,7 @@ const ImageToBraille = () => {
           />
         </div>
       </div>
-      <TwoButtons downloadPDF={handleDownloadPDF} />
+      <TwoButtons downloadPDF={handleDownloadPDF} downloadBRF={handleDownloadBRF} />
       <ThreeButtons />
     </div>
   );

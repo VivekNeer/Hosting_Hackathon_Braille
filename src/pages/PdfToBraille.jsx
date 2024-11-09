@@ -65,33 +65,44 @@ const PdfToBraille = () => {
 
   const handleDownloadPDF = () => {
     if (!brailleFontBase64) {
-        alert('Braille font not loaded');
-        return;
+      alert('Braille font not loaded');
+      return;
+    }
+
+    const doc = new jsPDF();
+    doc.addFileToVFS('braille.ttf', brailleFontBase64);
+    doc.addFont('braille.ttf', 'braille', 'normal');
+    doc.setFont('braille', 'normal');
+    doc.setFontSize(14);
+
+    const pageHeight = doc.internal.pageSize.height;
+    const margin = 10;
+    const maxLineHeight = pageHeight - 2 * margin;
+    let y = margin;
+
+    const lines = doc.splitTextToSize(brailleText, 180);
+
+    lines.forEach(line => {
+      if (y + 10 > maxLineHeight) { // 10 here represents the approximate line height
+        doc.addPage();
+        y = margin;
       }
-    
-      const doc = new jsPDF();
-      doc.addFileToVFS('braille.ttf', brailleFontBase64);
-      doc.addFont('braille.ttf', 'braille', 'normal');
-      doc.setFont('braille', 'normal');
-      doc.setFontSize(14);
-    
-      const pageHeight = doc.internal.pageSize.height;
-      const margin = 10;
-      const maxLineHeight = pageHeight - 2 * margin;
-      let y = margin;
-    
-      const lines = doc.splitTextToSize(brailleText, 180);
-    
-      lines.forEach(line => {
-        if (y + 10 > maxLineHeight) { // 10 here represents the approximate line height
-          doc.addPage();
-          y = margin;
-        }
-        doc.text(line, margin, y);
-        y += 10;
-      });
-    
-      doc.save('braille_output.pdf');};
+      doc.text(line, margin, y);
+      y += 10;
+    });
+
+    doc.save('braille_output.pdf');
+  };
+
+  // BRF file download handler
+  const handleDownloadBRF = () => {
+    const blob = new Blob([brailleText], { type: 'text/plain' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'braille_output.brf';
+    link.click();
+  };
+
   return (
     <div className="flex justify-center flex-col items-center w-full gap-10">
       <div className="flex gap-16">
@@ -131,8 +142,8 @@ const PdfToBraille = () => {
           />
         </div>
       </div>
-      <TwoButtons downloadPDF={handleDownloadPDF} />
-      <ThreeButtons/>
+      <TwoButtons downloadPDF={handleDownloadPDF} downloadBRF={handleDownloadBRF}/>
+      <ThreeButtons />
     </div>
   );
 }
