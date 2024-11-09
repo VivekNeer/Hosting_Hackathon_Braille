@@ -54,10 +54,11 @@ const CustomNavbar = () => {
       </div>
 
       <div className="navbar-end">
-        <select data-choose-theme className="btn hidden lg:block">
-          <option value="cupcake">Cupcake</option>
-          <option value="business">Business</option>
-        </select>
+      <select data-choose-theme className="btn hidden lg:block">
+        <option value="dark">Dark</option>
+        <option value="lofi">Lofi</option>
+      </select>
+
       </div>
     </div>
   );
