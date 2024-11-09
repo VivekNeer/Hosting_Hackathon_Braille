@@ -11,7 +11,7 @@ const ThreeButtons = () => {
                 </Link>
                 <Link to="/imagetobraille">
                     <button className="btn btn-accent  w-64 h-24 text-lg bottom-16 ">Image to
-                        Braillea
+                        Braille
                     </button>
                 </Link>
                 <Link to="/pdftobraille">

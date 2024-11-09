@@ -16,7 +16,6 @@ function App() {
                 <div className="flex-grow relative">
                     <Routes>
                         <Route path="/" element={<Home/>}/>
-                        <Route path="/contact" element={<Contact/>}/>
                         <Route path="/texttobraille" element={<TextToBraille/>}/>
                         <Route path="/imagetobraille" element={<ImageToBraille/>}/>
                         <Route path="/pdftobraille" element={<PdfToBraille/>}/>
