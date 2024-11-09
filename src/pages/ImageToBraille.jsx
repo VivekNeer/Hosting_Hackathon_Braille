@@ -38,31 +38,78 @@ const LETTER_INDICATOR = '⠰';
 //   }
 //   return result;
 // }
+// function toBraille(text) {
+//     let result = '';
+//     let isPrevCharNumber = false;
+//     for (const char of text) {
+//       if (/\d/.test(char)) {
+//         if (!isPrevCharNumber) {
+//           result += NUMBER_INDICATOR;
+//           isPrevCharNumber = true;
+//         }
+//         result += brailleMap[char] || '?';  // Use ? for unmapped numbers
+//       } else if (/[a-zA-Z]/.test(char)) {
+//         if (isPrevCharNumber) {
+//           result += LETTER_INDICATOR;
+//           isPrevCharNumber = false;
+//         }
+//         result += brailleMap[char.toLowerCase()] || '?';  // Use ? for unmapped letters
+//       } else if (brailleMap[char]) {
+//         result += brailleMap[char];
+//         isPrevCharNumber = false;
+//       } else {
+//         result += '?';  // For unmapped special characters
+//       }
+//     }
+//     return result;
+//   }
+
 function toBraille(text) {
-    let result = '';
-    let isPrevCharNumber = false;
-    for (const char of text) {
-      if (/\d/.test(char)) {
-        if (!isPrevCharNumber) {
-          result += NUMBER_INDICATOR;
-          isPrevCharNumber = true;
-        }
-        result += brailleMap[char] || '?';  // Use ? for unmapped numbers
-      } else if (/[a-zA-Z]/.test(char)) {
-        if (isPrevCharNumber) {
-          result += LETTER_INDICATOR;
-          isPrevCharNumber = false;
-        }
-        result += brailleMap[char.toLowerCase()] || '?';  // Use ? for unmapped letters
-      } else if (brailleMap[char]) {
-        result += brailleMap[char];
-        isPrevCharNumber = false;
-      } else {
-        result += '?';  // For unmapped special characters
+  let result = '';
+  let isPrevCharNumber = false;
+
+  // Custom mapping for special characters
+  const specialCharMap = {
+    '+': '⠐', 
+    '.': '⠲', 
+    '(': '⠶', 
+    ')': '⠶', 
+    '/': '⠌', 
+    '¥': '⠘', 
+    ':': '⠱', 
+    '=': '⠿', 
+    '"': '⠶⠶', // example for double quotes
+    ' ': ' ' // Maintain space for better text flow
+  };
+
+  for (const char of text) {
+    if (/\d/.test(char)) {
+      // If we encounter a number, add number indicator if not already added
+      if (!isPrevCharNumber) {
+        result += NUMBER_INDICATOR;
+        isPrevCharNumber = true;
       }
+      result += brailleMap[char] || '?'; // Use ? if there's no mapping
+    } else if (/[a-zA-Z]/.test(char)) {
+      // If the character is a letter, and we're coming from a number, add letter indicator
+      if (isPrevCharNumber) {
+        result += LETTER_INDICATOR;
+        isPrevCharNumber = false;
+      }
+      result += brailleMap[char.toLowerCase()] || '?'; // Use ? if there's no mapping
+    } else if (specialCharMap[char]) {
+      // Handle special characters with custom mappings
+      result += specialCharMap[char];
+      isPrevCharNumber = false; // Reset number flag if we hit a special character
+    } else {
+      // For any unmapped character, simply skip or handle differently
+      result += ''; // Skip it or replace with another symbol
+      isPrevCharNumber = false;
     }
-    return result;
   }
+  return result;
+}
+
   
 const ImageToBraille = () => {
   const [extractedText, setExtractedText] = useState('');

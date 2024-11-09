@@ -5,9 +5,10 @@ import ThreeButtons from '../components/ThreeButtons'
 
 const Home = () => {
   return (
-    <div>
-        <ThreeButtons />
-    </div>
+<div className="w-full h-full flex items-center justify-center">
+    <ThreeButtons />
+</div>
+
   )
 }
 
